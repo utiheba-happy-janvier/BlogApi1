@@ -5,7 +5,64 @@ const bcrypt = require("bcryptjs");
 const Users = require("./model/User");
 
 require("dotenv").config();
-
+/**
+ * @swagger
+ * /api/user/register:
+ *   post:
+ *     description: Register a new user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: body
+ *         name: body
+ *         description: The body of the request for registering a user
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             name:
+ *               type: string
+ *               description: Name of the user
+ *             email:
+ *               type: string
+ *               format: email
+ *               description: Email of the user
+ *             password:
+ *               type: string
+ *               description: Password of the user
+ *     responses:
+ *       201:
+ *         description: A successful registration returns the token and user details
+ *         schema:
+ *           type: object
+ *           properties:
+ *             token:
+ *               type: string
+ *               description: The token of the registered user
+ *             user:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                   description: Name of the user
+ *                 email:
+ *                   type: string
+ *                   format: email
+ *                   description: Email of the user
+ *                 password:
+ *                   type: string
+ *                   description: Hashed password of the user
+ *       400:
+ *         description: A failed registration returns an error message
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: string
+ *               description: The status of the registration
+ *             error:
+ *               type: string
+ *               description: The error message during registration
+ */
 router.post("/register", async (req, res) => {
   try {
     const { email, password, name } = req.body;
@@ -57,6 +114,60 @@ router.post("/register", async (req, res) => {
   }
 });
 //LOGIN
+/**
+ * @swagger
+ * /api/user/login:
+ *   post:
+ *     description: Login to the application
+ *     produces:
+ *       - application/json
+ *     tags: [Users]
+ *     parameters:
+ *       - name: email
+ *         description: Email of the user
+ *         in: body
+ *         required: true
+ *         type: string
+ *       - name: password
+ *         description: Password of the user
+ *         in: body
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Login success
+ *         schema:
+ *           type: object
+ *           properties:
+ *             token:
+ *               type: string
+ *               description: JWT token
+ *             message:
+ *               type: string
+ *               description: Success message
+ *       400:
+ *         description: Email and password fields are required
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: string
+ *               description: Status of the response
+ *             error:
+ *               type: string
+ *               description: Error message
+ *       404:
+ *         description: Incorrect email or password
+ *         schema:
+ *           type: object
+ *           properties:
+ *             status:
+ *               type: string
+ *               description: Status of the response
+ *             error:
+ *               type: string
+ *               description: Error message
+ */
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
